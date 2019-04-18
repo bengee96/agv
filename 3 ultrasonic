@@ -1,0 +1,114 @@
+#define trigPin1 14      // trig pin
+#define echoPin1 15     // Echo pin
+#define trigPin2 16      
+#define echoPin2 17    
+#define trigPin3 18      
+#define echoPin3 19  
+   
+  
+#define LS 3          //  left sensor
+#define RS 2          // right sensor
+#define dir1 8         // right motor
+#define pwm1 9        // right motor
+#define dir2 10        // left motor
+#define pwm2 11       // left motor
+
+void setup()
+{
+  
+pinMode(trigPin1, OUTPUT);        
+pinMode(echoPin1, INPUT); 
+pinMode(trigPin2, OUTPUT);        
+pinMode(echoPin2, INPUT); 
+pinMode(trigPin3, OUTPUT);        
+pinMode(echoPin3, INPUT); 
+
+pinMode(LS, INPUT);
+pinMode(RS, INPUT);
+pinMode(pwm1, OUTPUT);
+pinMode(pwm2, OUTPUT);
+
+Serial.begin(9600);
+}
+
+void moveforward(){
+analogWrite(pwm1,90); 
+analogWrite(pwm2,90);
+}
+void moveright(){
+analogWrite(pwm1,0); 
+analogWrite(pwm2,70);
+}
+void moveleft(){
+analogWrite(pwm1,70); 
+analogWrite(pwm2,0);
+}
+void stop(){
+analogWrite(pwm1,0); 
+analogWrite(pwm2,0);
+}
+
+void loop()
+{
+  int duration1, distance1;
+  digitalWrite(trigPin1, LOW);
+  delayMicroseconds(2);  
+  digitalWrite(trigPin1, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin1, LOW);
+  duration1 = pulseIn(echoPin1, HIGH); // receive reflected waves
+  distance1 = duration1 / 58.2;   // convert to distance
+
+int duration2, distance2;
+  digitalWrite(trigPin2, LOW);
+  delayMicroseconds(2);  
+  digitalWrite(trigPin2, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin2, LOW);
+  duration2 = pulseIn(echoPin2, HIGH); // receive reflected waves
+  distance2 = duration2 / 58.2;   // convert to distance
+
+int duration3, distance3;
+  digitalWrite(trigPin3, LOW);
+  delayMicroseconds(2);  
+  digitalWrite(trigPin3, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin3, LOW);
+  duration3 = pulseIn(echoPin3, HIGH); // receive reflected waves
+  distance3 = duration3 / 58.2;   // convert to distance
+  
+
+
+      if  (distance1 >10 && distance2 >10 && distance3 >10 ) 
+      
+        if (!digitalRead(LS) && !digitalRead(RS))      // Move Forward
+{
+moveforward();
+}   
+        if (!digitalRead(LS) && digitalRead(RS))     // Turn right
+{
+moveright();
+}
+
+        if (digitalRead(LS) && !digitalRead(RS))     // Turn left
+{
+moveleft();
+}
+
+        if (digitalRead(LS) && digitalRead(RS))    // Stop
+{
+stop();
+
+}
+      
+      
+ if (distance1 <9 || distance2 < 9 || distance3 < 9)   
+{
+stop();
+}
+
+ 
+
+
+
+}
